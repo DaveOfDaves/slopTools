@@ -103,12 +103,14 @@ touch "$HOME/.bashrc"
 sed -i "/^$MARK_START\$/,/^$MARK_END\$/d" "$HOME/.bashrc"
 cat >> "$HOME/.bashrc" <<EOF
 $MARK_START
-__pwnbox_vpn() {
+# VPN (tun0) IP if connected, otherwise the IP of the default-route adapter
+__pwnbox_ip() {
     local ip
     ip=\$(ip -4 -o addr show tun0 2>/dev/null | awk '{print \$4}' | cut -d/ -f1)
+    [ -z "\$ip" ] && ip=\$(ip -4 route get 1.1.1.1 2>/dev/null | awk '{for(i=1;i<NF;i++) if(\$i=="src") {print \$(i+1); exit}}')
     [ -n "\$ip" ] && printf '[\001\033[1;34m\002%s\001\033[1;32m\002]─' "\$ip"
 }
-PS1='\[\033[1;32m\]┌─\$(__pwnbox_vpn)[\[\033[1;37m\]\u\[\033[1;32m\]@\[\033[1;34m\]\h\[\033[1;32m\]]─[\[\033[1;37m\]\w\[\033[1;32m\]]\n\[\033[1;32m\]└──╼ [\[\033[1;33m\]★\[\033[1;32m\]]\\\$ \[\033[0m\]'
+PS1='\[\033[1;32m\]┌─\$(__pwnbox_ip)[\[\033[1;37m\]\u\[\033[1;32m\]@\[\033[1;34m\]\h\[\033[1;32m\]]─[\[\033[1;37m\]\w\[\033[1;32m\]]\n\[\033[1;32m\]└──╼ [\[\033[1;33m\]★\[\033[1;32m\]]\\\$ \[\033[0m\]'
 $MARK_END
 EOF
 
