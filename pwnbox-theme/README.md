@@ -7,6 +7,8 @@ Makes a Parrot OS (MATE) install look like the HackTheBox Pwnbox.
 ./pwnbox-theme.sh --restore  # undo (restores the latest backup)
 ```
 
+See [CHANGELOG.md](CHANGELOG.md) for what has changed.
+
 What it does:
 
 - **Desktop:** HackTheBox GTK theme, `hackthebox` icons, HTB window borders, Breeze cursor, HTB wallpaper.
